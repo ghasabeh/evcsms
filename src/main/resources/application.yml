@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: EVCSMS
+server:
+  port: 8090
+# ***** data source config *****
+---
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/evcsms"
+    username: evcsms
+    password: evcsms@123
