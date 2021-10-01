@@ -40,8 +40,7 @@ public class CompanyControllerTest {
 
     @Test
     public void postingANewCompanyShouldCreateAnewCompanyInDatabase() throws Exception {
-        CompanyDto companyDto = new CompanyDto();
-        companyDto.setName("TestingCompany");
+        CompanyDto companyDto = CompanyDto.builder().name("TestingCompany").build();
 
         Mockito.when(companyService.create(argumentCaptor.capture())).thenReturn(1L);
         ObjectMapper objectMapper = new ObjectMapper();
