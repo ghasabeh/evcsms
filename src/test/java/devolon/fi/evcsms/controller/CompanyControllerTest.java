@@ -54,4 +54,14 @@ public class CompanyControllerTest {
         Assertions.assertEquals(argumentCaptor.getValue().getName(), "TestingCompany");
 
     }
+
+    @Test
+    public void companyNameCanNotBeEmpty() throws Exception {
+        CompanyDto companyDto = CompanyDto.builder().build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(companyDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
