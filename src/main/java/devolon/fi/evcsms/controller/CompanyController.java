@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
@@ -24,5 +21,10 @@ public class CompanyController {
     @PostMapping
     public ResponseEntity<Long> createCompany(@Validated(CreateValidationGroup.class) @RequestBody CompanyDto companyDto) {
         return new ResponseEntity<>(service.create(companyDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CompanyDto> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 }
