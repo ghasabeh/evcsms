@@ -8,4 +8,10 @@ import devolon.fi.evcsms.model.entity.BaseEntity;
  */
 public interface BaseCrudService<E extends BaseEntity, D extends BaseDto> {
     Long create(D dto);
+
+    void update(D dto);
+
+    D findById(Long id);
+
+    void deleteById(Long id);
 }
