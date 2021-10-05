@@ -1,6 +1,7 @@
 package devolon.fi.evcsms.controller;
 
 import devolon.fi.evcsms.model.dto.CompanyDto;
+import devolon.fi.evcsms.model.dto.response.ResponseDto;
 import devolon.fi.evcsms.service.company.CompanyService;
 import devolon.fi.evcsms.utils.CreateValidationGroup;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ public class CompanyController {
     private final CompanyService service;
 
     @PostMapping
-    public ResponseEntity<Long> createCompany(@Validated(CreateValidationGroup.class) @RequestBody CompanyDto companyDto) {
-        return new ResponseEntity<>(service.create(companyDto), HttpStatus.CREATED);
+    public ResponseEntity<ResponseDto<Long>> createCompany(@Validated(CreateValidationGroup.class) @RequestBody CompanyDto companyDto) {
+        return new ResponseEntity<>(new ResponseDto<>(service.create(companyDto)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyDto> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity<ResponseDto<CompanyDto>> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(new ResponseDto<>(service.findById(id)), HttpStatus.OK);
     }
 }
