@@ -4,6 +4,7 @@ import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.dto.response.ResponseDto;
 import devolon.fi.evcsms.service.company.CompanyService;
 import devolon.fi.evcsms.utils.CreateValidationGroup;
+import devolon.fi.evcsms.utils.UpdateValidationGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,17 @@ public class CompanyController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<CompanyDto>> findById(@PathVariable Long id) {
         return new ResponseEntity<>(new ResponseDto<>(service.findById(id)), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<ResponseDto<Void>> updateCompany(@Validated(UpdateValidationGroup.class) @RequestBody CompanyDto companyDto) {
+        service.update(companyDto);
+        return new ResponseEntity<>(new ResponseDto<>(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto<Void>> deleteCompany(@PathVariable Long id) {
+        service.deleteById(id);
+        return new ResponseEntity<>(new ResponseDto<>(), HttpStatus.OK);
     }
 }
