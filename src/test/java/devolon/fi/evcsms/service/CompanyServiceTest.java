@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Optional;
 
@@ -87,6 +88,26 @@ public class CompanyServiceTest {
                 companyService.findById(searchedCompanyId));
 
         verify(companyRepository).findById(searchedCompanyId);
+    }
+
+    @Test
+    void deleteByIdACompany() {
+        Long wantToDeleteId = 1L;
+        doNothing().when(companyRepository).deleteById(wantToDeleteId);
+        companyService.deleteById(wantToDeleteId);
+
+        verify(companyRepository).deleteById(wantToDeleteId);
+    }
+
+    @Test
+    void deleteACompanyIfNotExist() {
+        Long wantToDeleteId = 1L;
+        doThrow(EmptyResultDataAccessException.class)
+                .when(companyRepository).deleteById(wantToDeleteId);
+        Assertions.assertThrows(EmptyResultDataAccessException.class, () ->
+                companyService.deleteById(wantToDeleteId));
+
+        verify(companyRepository).deleteById(wantToDeleteId);
     }
 
 }
