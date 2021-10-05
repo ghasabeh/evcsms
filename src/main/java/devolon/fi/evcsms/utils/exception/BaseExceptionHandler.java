@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public class BaseExceptionHandler {
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .timestamp(new Date())
                 .message(ex.getMessage())
-                .description(request.getDescription(false))
+                .description(((ServletWebRequest) request).getRequest().getMethod() + " " + request.getDescription(false))
                 .build());
         errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
         return errorMessageResponseDto;
@@ -38,7 +39,7 @@ public class BaseExceptionHandler {
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .timestamp(new Date())
                 .message(translator.translate(ex))
-                .description(request.getDescription(false))
+                .description(((ServletWebRequest) request).getRequest().getMethod() + " " + request.getDescription(false))
                 .build());
         errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
         return errorMessageResponseDto;
