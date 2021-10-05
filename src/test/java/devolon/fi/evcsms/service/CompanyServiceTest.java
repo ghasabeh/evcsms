@@ -44,4 +44,18 @@ public class CompanyServiceTest {
         Assertions.assertNotNull(id);
         verify(companyRepository, times(1)).save(any());
     }
+
+    @Test
+    void updateACompany() {
+        CompanyDto companyDto = CompanyDto.builder().name("TestingCompany").build();
+        CompanyEntity companyEntity = new CompanyEntity();
+        companyEntity.setId(1L);
+        companyEntity.setName("TestingCompany");
+        when(companyMapper.map(companyDto)).thenReturn(companyEntity);
+        when(companyRepository.save(companyEntity)).thenReturn(companyEntity);
+        companyService.update(companyDto);
+
+        verify(companyMapper).map(companyDto);
+        verify(companyRepository).save(any());
+    }
 }
