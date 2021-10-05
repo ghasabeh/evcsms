@@ -1,6 +1,7 @@
 package devolon.fi.evcsms.model.dto.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class ResponseDto<T> {
     private ResponseType responseType = ResponseType.GENERAL;
     private T response;
