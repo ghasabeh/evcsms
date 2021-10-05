@@ -3,12 +3,13 @@ package devolon.fi.evcsms.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "STATION", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "NAME", name = "station_uk_name"),
+        @UniqueConstraint(columnNames = {"LATITUDE", "LONGITUDE"}, name = "station_uk_location")
+})
 @Getter
 @Setter
 public class StationEntity extends BaseEntity {
@@ -19,7 +20,8 @@ public class StationEntity extends BaseEntity {
     @Column(name = "Longitude", nullable = false)
     private Double longitude;
     @ManyToOne
-    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "ID", nullable = false,
+            foreignKey = @ForeignKey(name = "station_company_fk"))
     private CompanyEntity company;
 
 }
