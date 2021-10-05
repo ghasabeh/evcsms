@@ -4,6 +4,7 @@ import devolon.fi.evcsms.model.dto.response.ResponseDto;
 import devolon.fi.evcsms.model.dto.response.ResponseType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,7 +20,7 @@ public class BaseExceptionHandler {
 
     private final SqlExceptionTranslator translator;
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(value = {EntityNotFoundException.class, EmptyResultDataAccessException.class})
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseDto<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
         ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
