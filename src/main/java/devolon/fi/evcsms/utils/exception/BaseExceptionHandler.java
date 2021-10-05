@@ -1,5 +1,7 @@
 package devolon.fi.evcsms.utils.exception;
 
+import devolon.fi.evcsms.model.dto.response.ResponseDto;
+import devolon.fi.evcsms.model.dto.response.ResponseType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,24 +19,28 @@ public class BaseExceptionHandler {
     private final SqlExceptionTranslator translator;
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorMessage resourceNotFoundException(Exception ex, WebRequest request) {
-        return ErrorMessage.builder()
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseDto<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
+        ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .timestamp(new Date())
                 .message(ex.getMessage())
                 .description(request.getDescription(false))
-                .build();
+                .build());
+        errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
+        return errorMessageResponseDto;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
-        return ErrorMessage.builder()
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseDto<ErrorMessage> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .timestamp(new Date())
                 .message(translator.translate(ex))
                 .description(request.getDescription(false))
-                .build();
+                .build());
+        errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
+        return errorMessageResponseDto;
     }
 }
