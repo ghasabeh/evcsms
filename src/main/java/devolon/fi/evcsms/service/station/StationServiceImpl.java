@@ -7,16 +7,19 @@ import devolon.fi.evcsms.model.entity.StationEntity;
 import devolon.fi.evcsms.repository.StationRepository;
 import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
  */
 @Service
 @RequiredArgsConstructor
-public class StationServiceImpl implements StationService{
+public class StationServiceImpl implements StationService {
     private final StationRepository stationRepository;
     private final StationMapper stationMapper;
 
@@ -46,5 +49,11 @@ public class StationServiceImpl implements StationService{
     @Override
     public void deleteById(Long id) {
         stationRepository.deleteById(id);
+    }
+
+    @Override
+    public List<StationDto> getAllStationOfCompany(Long companyId, int page, int size) {
+        return stationRepository.getAllStationOfCompany(companyId, PageRequest.of(page, size))
+                .stream().map(stationMapper::map).collect(Collectors.toList());
     }
 }

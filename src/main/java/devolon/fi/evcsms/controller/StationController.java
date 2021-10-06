@@ -11,12 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.List;
+
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
  */
 @RestController
 @RequestMapping("/api/station")
 @RequiredArgsConstructor
+@Validated
 public class StationController {
     private final StationService stationService;
 
@@ -40,6 +45,13 @@ public class StationController {
     public ResponseEntity<ResponseDto<Void>> deleteStation(@PathVariable Long id) {
         stationService.deleteById(id);
         return new ResponseEntity<>(new ResponseDto<>(), HttpStatus.OK);
+    }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<ResponseDto<List<StationDto>>> allStationOf(@PathVariable Long companyId,
+                                                                      @RequestParam @Min(0) Integer page,
+                                                                      @RequestParam @Min(1) @Max(10) Integer size) {
+        return new ResponseEntity<>(new ResponseDto<>(stationService.getAllStationOfCompany(companyId, page, size)), HttpStatus.OK);
     }
 
 }
