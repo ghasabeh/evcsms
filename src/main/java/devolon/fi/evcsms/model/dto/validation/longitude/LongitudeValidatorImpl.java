@@ -2,6 +2,7 @@ package devolon.fi.evcsms.model.dto.validation.longitude;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Objects;
 
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
@@ -13,13 +14,15 @@ public class LongitudeValidatorImpl implements ConstraintValidator<LongitudeVali
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        boolean isLongitudeValid = value.matches(LONGITUDE_PATTERN);
-        if (!isLongitudeValid) {
-            return false;
-        }
-        double longitude = Double.parseDouble(value);
-        if (longitude < MIN_VALUE || longitude > MAX_VALUE) {
-            return false;
+        if (Objects.nonNull(value)) {
+            boolean isLongitudeValid = value.matches(LONGITUDE_PATTERN);
+            if (!isLongitudeValid) {
+                return false;
+            }
+            double longitude = Double.parseDouble(value);
+            if (longitude < MIN_VALUE || longitude > MAX_VALUE) {
+                return false;
+            }
         }
         return true;
     }

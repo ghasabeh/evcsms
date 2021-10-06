@@ -2,6 +2,7 @@ package devolon.fi.evcsms.model.dto.validation.latitude;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Objects;
 
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
@@ -12,13 +13,15 @@ public class LatitudeValidatorImpl implements ConstraintValidator<LatitudeValida
     private static final String LATITUDE_PATTERN = "^[+,-]?\\d{1,2}(\\.\\d{6})$";
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        boolean isValid = value.matches(LATITUDE_PATTERN);
-        if (!isValid) {
-            return false;
-        }
-        double latitude = Double.parseDouble(value);
-        if (latitude < MIN_VALUE || latitude > MAX_VALUE) {
-            return false;
+        if (Objects.nonNull(value)) {
+            boolean isValid = value.matches(LATITUDE_PATTERN);
+            if (!isValid) {
+                return false;
+            }
+            double latitude = Double.parseDouble(value);
+            if (latitude < MIN_VALUE || latitude > MAX_VALUE) {
+                return false;
+            }
         }
         return true;
     }
