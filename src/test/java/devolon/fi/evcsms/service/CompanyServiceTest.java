@@ -5,7 +5,7 @@ import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.entity.CompanyEntity;
 import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.service.company.CompanyServiceImpl;
-import devolon.fi.evcsms.utils.exception.EntityNotFoundException;
+import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -84,7 +84,7 @@ public class CompanyServiceTest {
         Long searchedCompanyId = 1L;
         when(companyRepository.findById(searchedCompanyId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () ->
+        Assertions.assertThrows(CustomEntityNotFoundException.class, () ->
                 companyService.findById(searchedCompanyId));
 
         verify(companyRepository).findById(searchedCompanyId);

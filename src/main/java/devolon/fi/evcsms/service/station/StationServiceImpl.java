@@ -5,7 +5,7 @@ import devolon.fi.evcsms.model.dto.StationDto;
 import devolon.fi.evcsms.model.entity.CompanyEntity;
 import devolon.fi.evcsms.model.entity.StationEntity;
 import devolon.fi.evcsms.repository.StationRepository;
-import devolon.fi.evcsms.utils.exception.EntityNotFoundException;
+import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class StationServiceImpl implements StationService{
 
     private void validateCompanyId(CompanyEntity company) {
         if (Objects.isNull(company.getId())) {
-            throw new EntityNotFoundException("Company Not Found");
+            throw new CustomEntityNotFoundException("Company Not Found");
         }
     }
 
@@ -40,7 +40,7 @@ public class StationServiceImpl implements StationService{
 
     @Override
     public StationDto findById(Long id) {
-        return stationMapper.map(stationRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+        return stationMapper.map(stationRepository.findById(id).orElseThrow(CustomEntityNotFoundException::new));
     }
 
     @Override

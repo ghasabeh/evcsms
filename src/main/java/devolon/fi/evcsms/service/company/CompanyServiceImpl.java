@@ -5,7 +5,7 @@ import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.entity.CompanyEntity;
 import devolon.fi.evcsms.model.entity.CompanyTreePathMaker;
 import devolon.fi.evcsms.repository.CompanyRepository;
-import devolon.fi.evcsms.utils.exception.EntityNotFoundException;
+import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto findById(Long id) {
-        return companyMapper.map(companyRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+        return companyMapper.map(companyRepository.findById(id).orElseThrow(CustomEntityNotFoundException::new));
     }
 
     @Override
