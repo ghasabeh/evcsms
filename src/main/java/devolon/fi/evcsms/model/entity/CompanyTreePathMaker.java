@@ -19,11 +19,13 @@ public class CompanyTreePathMaker {
 
     public void prePersist(CompanyEntity entity) {
         entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(EntityNotFoundException::new));
+        entity.setPath(Objects.nonNull(entity.getParent()) ?
+                entity.getParent().getPath() + PATH_SEPARATOR + entity.getParent().getId() : "0");
     }
 
     public void preUpdate(CompanyEntity entity) {
         // we sure findById is not null
-        CompanyEntity oldEntity = repository.findById(entity.getId()).get();
+        CompanyEntity oldEntity = repository.findById(entity.getId()).orElseThrow(EntityNotFoundException::new);
         // This means if parent change, we should update all paths
         if ((Objects.isNull(oldEntity.getParent()) && Objects.nonNull(entity.getParent())) || !oldEntity.getParent().equals(entity.getParent())) {
             if (Objects.nonNull(entity.getParent())) {
