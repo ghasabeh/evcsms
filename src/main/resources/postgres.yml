@@ -1,0 +1,20 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+networks:
+  postgres_network:
+    name: postgres_network
+    driver: bridge
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: evcsms
+      POSTGRES_USER: evcsms
+      POSTGRES_PASSWORD: evcsms@123
+    networks:
+      - postgres_network
+    ports:
+      - 5432:5432
