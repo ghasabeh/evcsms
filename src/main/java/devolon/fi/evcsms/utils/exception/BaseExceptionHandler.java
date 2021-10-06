@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 
 @RestControllerAdvice
@@ -20,7 +21,7 @@ public class BaseExceptionHandler {
 
     private final SqlExceptionTranslator translator;
 
-    @ExceptionHandler(value = {EntityNotFoundException.class, EmptyResultDataAccessException.class})
+    @ExceptionHandler(value = {EntityNotFoundException.class, EntityNotFoundException.class, EmptyResultDataAccessException.class})
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseDto<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
         ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
