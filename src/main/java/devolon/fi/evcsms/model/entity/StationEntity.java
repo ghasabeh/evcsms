@@ -10,6 +10,7 @@ import javax.persistence.*;
         @UniqueConstraint(columnNames = "NAME", name = "station_uk_name"),
         @UniqueConstraint(columnNames = {"LATITUDE", "LONGITUDE"}, name = "station_uk_location")
 })
+@SequenceGenerator(name = "DEFAULT_SEQ_GEN", sequenceName = "STATION_SEQ", allocationSize = 1)
 @Getter
 @Setter
 public class StationEntity extends BaseEntity {

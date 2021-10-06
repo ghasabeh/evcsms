@@ -10,6 +10,7 @@ import java.util.Set;
 @Table(name = "Company", uniqueConstraints = {
         @UniqueConstraint(columnNames = "NAME", name = "company_uk_name")
 })
+@SequenceGenerator(name = "DEFAULT_SEQ_GEN", sequenceName = "COMPANY_SEQ", allocationSize = 1)
 @Setter
 @Getter
 public class CompanyEntity extends BaseEntity{

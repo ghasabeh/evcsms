@@ -17,7 +17,7 @@ import java.util.Objects;
 @Getter
 public class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "DEFAULT_SEQ_GEN", strategy = GenerationType.AUTO)
     protected Long id;
 
     @Override
