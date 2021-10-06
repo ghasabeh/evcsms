@@ -1,7 +1,7 @@
 package devolon.fi.evcsms.model.entity;
 
 import devolon.fi.evcsms.repository.CompanyRepository;
-import devolon.fi.evcsms.utils.exception.EntityNotFoundException;
+import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,19 +18,24 @@ public class CompanyTreePathMaker {
     private final CompanyRepository repository;
 
     public void prePersist(CompanyEntity entity) {
-        entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(EntityNotFoundException::new));
+        if (Objects.nonNull(entity.getParent())) {
+            if (Objects.isNull(entity.getParent().getId())) {
+                throw new CustomEntityNotFoundException();
+            }
+            entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(CustomEntityNotFoundException::new));
+        }
         entity.setPath(Objects.nonNull(entity.getParent()) ?
-                entity.getParent().getPath() + PATH_SEPARATOR + entity.getParent().getId() : "0");
+                    entity.getParent().getPath() + PATH_SEPARATOR + entity.getParent().getId() : "0");
     }
 
     public void preUpdate(CompanyEntity entity) {
         // we sure findById is not null
-        CompanyEntity oldEntity = repository.findById(entity.getId()).orElseThrow(EntityNotFoundException::new);
+        CompanyEntity oldEntity = repository.findById(entity.getId()).orElseThrow(CustomEntityNotFoundException::new);
         // This means if parent change, we should update all paths
         if ((Objects.isNull(oldEntity.getParent()) && Objects.nonNull(entity.getParent())) || !oldEntity.getParent().equals(entity.getParent())) {
             if (Objects.nonNull(entity.getParent())) {
                 //we should call find by id for parent and set it manually
-                entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(EntityNotFoundException::new));
+                entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(CustomEntityNotFoundException::new));
             }
             //because newEntity is not managed then children not loaded
             //so we should load children from oldEntity in order to set their path
