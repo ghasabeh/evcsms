@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class StationDto extends BaseDto {
-    @NotBlank(message = "error.validation.notBlank", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NotBlank(message = "name can not be blank.", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String name;
     @LatitudeValidator(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @NotNull(message = "error.validation.notNull", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NotNull(message = "latitude can not be null", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String latitude;
     @LongitudeValidator(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @NotNull(message = "error.validation.notNull", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NotNull(message = "longitude can not be null", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String longitude;
-    @NotNull(message = "error.validation.notNull", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NotNull(message = "company can not be null", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private CompanyDto company;
 }

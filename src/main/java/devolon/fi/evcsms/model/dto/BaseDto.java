@@ -11,6 +11,6 @@ import java.io.Serializable;
  */
 @Data
 public class BaseDto implements Serializable {
-    @NotNull(message = "error.validation.notNull", groups = UpdateValidationGroup.class)
+    @NotNull(message = "id can not be null", groups = UpdateValidationGroup.class)
     private Long id;
 }

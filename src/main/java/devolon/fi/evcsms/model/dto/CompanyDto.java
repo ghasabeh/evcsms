@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompanyDto extends BaseDto {
-    @NotBlank(message = "error.validation.notBlank", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NotBlank(message = "name can not be blank", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String name;
     private CompanyDto parent;
 }
