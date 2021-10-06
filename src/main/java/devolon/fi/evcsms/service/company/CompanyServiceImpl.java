@@ -2,6 +2,8 @@ package devolon.fi.evcsms.service.company;
 
 import devolon.fi.evcsms.mapper.CompanyMapper;
 import devolon.fi.evcsms.model.dto.CompanyDto;
+import devolon.fi.evcsms.model.entity.CompanyEntity;
+import devolon.fi.evcsms.model.entity.CompanyTreePathMaker;
 import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.utils.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +17,20 @@ import org.springframework.stereotype.Service;
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+    private final CompanyTreePathMaker companyTreePathMaker;
 
     @Override
     public Long create(CompanyDto dto) {
-        return companyRepository.save(companyMapper.map(dto)).getId();
+        CompanyEntity companyEntity = companyMapper.map(dto);
+        companyTreePathMaker.prePersist(companyEntity);
+        return companyRepository.save(companyEntity).getId();
     }
 
     @Override
     public void update(CompanyDto dto) {
-        companyRepository.save(companyMapper.map(dto));
+        CompanyEntity companyEntity = companyMapper.map(dto);
+        companyTreePathMaker.preUpdate(companyEntity);
+        companyRepository.save(companyEntity);
     }
 
     @Override
