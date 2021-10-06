@@ -1,5 +1,6 @@
 package devolon.fi.evcsms.controller;
 
+import devolon.fi.evcsms.model.dto.LocationDto;
 import devolon.fi.evcsms.model.dto.StationDto;
 import devolon.fi.evcsms.model.dto.response.ResponseDto;
 import devolon.fi.evcsms.service.station.StationService;
@@ -54,4 +55,11 @@ public class StationController {
         return new ResponseEntity<>(new ResponseDto<>(stationService.getAllStationOfCompany(companyId, page, size)), HttpStatus.OK);
     }
 
+    @PostMapping("/nearest-location")
+    public ResponseEntity<ResponseDto<List<StationDto>>> nearestLocation(
+            @RequestBody @Validated LocationDto locationDto,
+            @RequestParam @Min(0) Integer page,
+            @RequestParam @Min(1) @Max(10) Integer size) {
+        return new ResponseEntity<>(new ResponseDto<>(stationService.nearestLocation(locationDto, page, size)), HttpStatus.OK);
+    }
 }

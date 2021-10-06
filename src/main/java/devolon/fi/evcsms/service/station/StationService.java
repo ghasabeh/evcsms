@@ -1,5 +1,6 @@
 package devolon.fi.evcsms.service.station;
 
+import devolon.fi.evcsms.model.dto.LocationDto;
 import devolon.fi.evcsms.model.dto.StationDto;
 import devolon.fi.evcsms.model.entity.StationEntity;
 import devolon.fi.evcsms.service.BaseCrudService;
@@ -11,4 +12,6 @@ import java.util.List;
  */
 public interface StationService extends BaseCrudService<StationEntity, StationDto> {
     List<StationDto> getAllStationOfCompany(Long companyId, int page, int size);
+
+    List<StationDto> nearestLocation(LocationDto location, Integer page, Integer size);
 }
