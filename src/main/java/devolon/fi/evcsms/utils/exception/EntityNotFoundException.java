@@ -4,4 +4,8 @@ public class EntityNotFoundException extends RuntimeException{
     public EntityNotFoundException() {
         super("Resource Not Found");
     }
+
+    public EntityNotFoundException(String message) {
+        super(message);
+    }
 }
