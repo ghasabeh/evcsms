@@ -20,5 +20,5 @@ public class LocationDto {
     String longitude;
     @NotNull(message = "distance can not be null")
     @Positive(message = "distance must be greater than 0")
-    Double distance;
+    Double radius;
 }

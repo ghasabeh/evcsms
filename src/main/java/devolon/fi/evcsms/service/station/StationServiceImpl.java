@@ -64,7 +64,7 @@ public class StationServiceImpl implements StationService {
         return stationRepository.getNearestStationsOfDistance(
                 Double.parseDouble(location.getLatitude()),
                 Double.parseDouble(location.getLongitude()),
-                location.getDistance(),
+                location.getRadius(),
                 UnitInCalculationDistanceBetweenTwoPoints.KILOMETER.getValue(),
                 PageRequest.of(page, size)).stream().map(stationMapper::map).collect(Collectors.toList());
     }
