@@ -1,0 +1,97 @@
+package devolon.fi.evcsms.controller;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import devolon.fi.evcsms.model.dto.CompanyDto;
+import devolon.fi.evcsms.model.dto.response.ResponseDto;
+import devolon.fi.evcsms.repository.CompanyRepository;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static devolon.fi.evcsms.util.JsonHelper.jsonToObject;
+import static devolon.fi.evcsms.util.JsonHelper.jsonify;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+ * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
+ */
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class CompanyControllerIT {
+
+    private MockMvc mockMvc;
+
+    @Autowired
+    private CompanyController companyController;
+
+    @Before
+    public void setup() throws Exception {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(this.companyController).build();// Standalone context
+    }
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Test
+    public void createACompanyWithoutParent() throws Exception {
+        String jsonResponse = callCreateCompanyApi(CompanyDto.builder().name("test1").build());
+        ResponseDto<Long> responseDto = jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        });
+        ResponseDto<CompanyDto> findResponse = jsonToObject(callFindByIdCompany(responseDto.getResponse()), new TypeReference<ResponseDto<CompanyDto>>() {
+        });
+
+        Assertions.assertEquals("test1", findResponse.getResponse().getName());
+    }
+
+    @Test
+    public void createACompanyWithParent() throws Exception {
+        ResponseDto<Long> parentResponseDto = jsonToObject(callCreateCompanyApi(CompanyDto.builder().name("parent").build()), new TypeReference<ResponseDto<Long>>() {
+        });
+        CompanyDto parentCompany = new CompanyDto();
+        parentCompany.setId(parentResponseDto.getResponse());
+        CompanyDto childCompany = CompanyDto.builder().name("child").parent(parentCompany).build();
+        ResponseDto<Long> childResponse = jsonToObject(callCreateCompanyApi(childCompany), new TypeReference<ResponseDto<Long>>() {
+        });
+        ResponseDto<CompanyDto> findResponse = jsonToObject(callFindByIdCompany(childResponse.getResponse()), new TypeReference<ResponseDto<CompanyDto>>() {
+        });
+
+        Assertions.assertEquals("child", findResponse.getResponse().getName());
+        Assertions.assertEquals("parent", findResponse.getResponse().getParent().getName());
+    }
+
+    @AfterEach
+    public void tearDown() {
+        companyRepository.deleteAll();
+    }
+
+    private String callFindByIdCompany(Long id) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.get("/api/company/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is("GENERAL")))
+                .andExpect(jsonPath("$.response").exists())
+                .andExpect(jsonPath("$.response.name").exists())
+                .andExpect(jsonPath("$.response.id").exists())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    private String callCreateCompanyApi(CompanyDto companyDto) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(companyDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.responseType", is("GENERAL")))
+                .andExpect(jsonPath("$.response").exists())
+                .andReturn().getResponse().getContentAsString();
+    }
+}
