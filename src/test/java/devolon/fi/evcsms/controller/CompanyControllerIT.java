@@ -152,6 +152,17 @@ public class CompanyControllerIT {
         Assertions.assertEquals("0," + parentCompany.getId(), findResponse.getResponse().getPath());
     }
 
+    @Test
+    public void canNotUpdateACompanyWithoutId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(CompanyDto.builder().name("test").build())))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.BAD_REQUEST.value())))
+                .andExpect(jsonPath("$.response.message", is("id can not be null")));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
