@@ -4,8 +4,8 @@ package devolon.fi.evcsms.model.dto.response;
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
  */
 public enum ResponseType {
-    GENERAL("general"),
-    EXCEPTION("exception");
+    GENERAL("GENERAL"),
+    EXCEPTION("EXCEPTION");
 
     private final String value;
 

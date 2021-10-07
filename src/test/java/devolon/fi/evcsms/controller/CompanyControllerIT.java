@@ -3,11 +3,14 @@ package devolon.fi.evcsms.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.dto.response.ResponseDto;
+import devolon.fi.evcsms.model.dto.response.ResponseType;
 import devolon.fi.evcsms.repository.CompanyRepository;
+import devolon.fi.evcsms.utils.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,10 +35,12 @@ public class CompanyControllerIT {
 
     @Autowired
     private CompanyController companyController;
+    @Autowired
+    private BaseExceptionHandler baseExceptionHandler;
 
     @BeforeAll
     public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(this.companyController).build();// Standalone context
+        this.mockMvc = MockMvcBuilders.standaloneSetup(this.companyController, this.baseExceptionHandler).build();// Standalone context
     }
 
     @Autowired
@@ -70,6 +75,20 @@ public class CompanyControllerIT {
         Assertions.assertEquals("parent", findResponse.getResponse().getParent().getName());
     }
 
+    @Test
+    public void canNotCreateDuplicateCompanyName() throws Exception {
+        String jsonResponse = callCreateCompanyApi(CompanyDto.builder().name("test1").build());
+        ResponseDto<Long> responseDto = jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        });
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(CompanyDto.builder().name("test1").build())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
+                .andReturn().getResponse().getContentAsString();
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
@@ -78,7 +97,7 @@ public class CompanyControllerIT {
     private String callFindByIdCompany(Long id) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get("/api/company/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.responseType", is("GENERAL")))
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())))
                 .andExpect(jsonPath("$.response").exists())
                 .andExpect(jsonPath("$.response.name").exists())
                 .andExpect(jsonPath("$.response.id").exists())
@@ -90,7 +109,7 @@ public class CompanyControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonify(companyDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.responseType", is("GENERAL")))
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())))
                 .andExpect(jsonPath("$.response").exists())
                 .andReturn().getResponse().getContentAsString();
     }
