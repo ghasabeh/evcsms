@@ -50,6 +50,7 @@ public class CompanyControllerIT {
         });
 
         Assertions.assertEquals("test1", findResponse.getResponse().getName());
+        Assertions.assertEquals("0", findResponse.getResponse().getPath());
     }
 
     @Test
@@ -65,6 +66,7 @@ public class CompanyControllerIT {
         });
 
         Assertions.assertEquals("child", findResponse.getResponse().getName());
+        Assertions.assertEquals("0," + findResponse.getResponse().getParent().getId(), findResponse.getResponse().getPath());
         Assertions.assertEquals("parent", findResponse.getResponse().getParent().getName());
     }
 
