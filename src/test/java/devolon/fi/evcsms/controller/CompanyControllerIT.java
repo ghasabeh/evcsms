@@ -163,6 +163,45 @@ public class CompanyControllerIT {
                 .andExpect(jsonPath("$.response.message", is("id can not be null")));
     }
 
+    @Test
+    public void updatePathOfACompanyAndItsChildrenWhenItsParentChange() throws Exception {
+        /* B --> A */
+        CompanyDto aCompany = CompanyDto.builder().name("A").build();
+        String jsonResponse = callCreateCompanyApi(aCompany);
+        aCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        CompanyDto bCompany = CompanyDto.builder().name("B").parent(aCompany).build();
+        jsonResponse = callCreateCompanyApi(bCompany);
+        bCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        /* B --> A */
+        /* D --> C*/
+        CompanyDto cCompany = CompanyDto.builder().name("C").build();
+        jsonResponse = callCreateCompanyApi(cCompany);
+        cCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        CompanyDto dCompany = CompanyDto.builder().name("D").parent(cCompany).build();
+        jsonResponse = callCreateCompanyApi(dCompany);
+        dCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        /* D --> C*/
+        /*change the parent of C to B results: D-->C-->B-->A*/
+        cCompany.setParent(bCompany);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(cCompany)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())));
+        CompanyDto cCompanyCallByFindApi = jsonToObject(callFindByIdCompany(cCompany.getId()), new TypeReference<ResponseDto<CompanyDto>>() {
+        }).getResponse();
+        CompanyDto dCompanyCallByFindApi = jsonToObject(callFindByIdCompany(dCompany.getId()), new TypeReference<ResponseDto<CompanyDto>>() {
+        }).getResponse();
+        String pathExpectedC = "0," + aCompany.getId() + "," + bCompany.getId();
+        String pathExpectedD = "0," + aCompany.getId() + "," + bCompany.getId() + "," + cCompany.getId();
+        Assertions.assertEquals(pathExpectedC, cCompanyCallByFindApi.getPath());
+        Assertions.assertEquals(pathExpectedD, dCompanyCallByFindApi.getPath());
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
