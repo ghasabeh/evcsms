@@ -85,8 +85,7 @@ public class CompanyControllerIT {
                 .content(jsonify(CompanyDto.builder().name("test1").build())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
-                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.INTERNAL_SERVER_ERROR.value())));
     }
 
     @Test
