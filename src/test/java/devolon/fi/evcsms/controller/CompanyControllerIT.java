@@ -100,6 +100,15 @@ public class CompanyControllerIT {
                 .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
+    @Test
+    public void entityNotFoundWhenFindingACompanyNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/company/{id}", 1000L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
