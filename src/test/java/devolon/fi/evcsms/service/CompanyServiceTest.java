@@ -3,6 +3,7 @@ package devolon.fi.evcsms.service;
 import devolon.fi.evcsms.mapper.CompanyMapper;
 import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.entity.CompanyEntity;
+import devolon.fi.evcsms.model.entity.CompanyTreePathMaker;
 import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.service.company.CompanyServiceImpl;
 import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
@@ -29,6 +30,9 @@ public class CompanyServiceTest {
     private CompanyRepository companyRepository;
 
     @Mock
+    private CompanyTreePathMaker companyTreePathMaker;
+
+    @Mock
     private CompanyMapper companyMapper;
 
     @Autowired
@@ -42,6 +46,7 @@ public class CompanyServiceTest {
         companyEntity.setId(1L);
         companyEntity.setName("TestingCompany");
         when(companyMapper.map(dto)).thenReturn(companyEntity);
+        doNothing().when(companyTreePathMaker).prePersist(companyEntity);
         when(companyRepository.save(companyEntity)).thenReturn(companyEntity);
         Long id = companyService.create(dto);
 
@@ -56,6 +61,7 @@ public class CompanyServiceTest {
         companyEntity.setId(1L);
         companyEntity.setName("TestingCompany");
         when(companyMapper.map(companyDto)).thenReturn(companyEntity);
+        doNothing().when(companyTreePathMaker).preUpdate(companyEntity);
         when(companyRepository.save(companyEntity)).thenReturn(companyEntity);
         companyService.update(companyDto);
 
