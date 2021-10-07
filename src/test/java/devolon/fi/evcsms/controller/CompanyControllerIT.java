@@ -109,6 +109,24 @@ public class CompanyControllerIT {
                 .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
+    @Test
+    public void updateACompany() throws Exception {
+        CompanyDto companyDto = CompanyDto.builder().name("test1").build();
+        String jsonResponse = callCreateCompanyApi(companyDto);
+        ResponseDto<Long> responseDto = jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        });
+        companyDto.setId(responseDto.getResponse());
+        companyDto.setName("test1-updated");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(companyDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())));
+        ResponseDto<CompanyDto> findResponse = jsonToObject(callFindByIdCompany(companyDto.getId()), new TypeReference<ResponseDto<CompanyDto>>() {
+        });
+        Assertions.assertEquals("test1-updated", findResponse.getResponse().getName());
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();

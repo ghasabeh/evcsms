@@ -4,6 +4,7 @@ import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ public class CompanyTreePathMaker {
 
     private final CompanyRepository repository;
 
+    @Transactional
     public void prePersist(CompanyEntity entity) {
         if (Objects.nonNull(entity.getParent())) {
             if (Objects.isNull(entity.getParent().getId())) {
@@ -28,11 +30,12 @@ public class CompanyTreePathMaker {
                     entity.getParent().getPath() + PATH_SEPARATOR + entity.getParent().getId() : "0");
     }
 
+    @Transactional
     public void preUpdate(CompanyEntity entity) {
         // we sure findById is not null
         CompanyEntity oldEntity = repository.findById(entity.getId()).orElseThrow(CustomEntityNotFoundException::new);
         // This means if parent change, we should update all paths
-        if ((Objects.isNull(oldEntity.getParent()) && Objects.nonNull(entity.getParent())) || !oldEntity.getParent().equals(entity.getParent())) {
+        if (Objects.isNull(oldEntity.getParent()) || (Objects.nonNull(entity.getParent()) && !oldEntity.getParent().equals(entity.getParent()))) {
             if (Objects.nonNull(entity.getParent())) {
                 //we should call find by id for parent and set it manually
                 entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(CustomEntityNotFoundException::new));

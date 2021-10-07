@@ -8,6 +8,7 @@ import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
@@ -26,6 +27,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.save(companyEntity).getId();
     }
 
+    @Transactional
     @Override
     public void update(CompanyDto dto) {
         CompanyEntity companyEntity = companyMapper.map(dto);
