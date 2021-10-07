@@ -127,6 +127,31 @@ public class CompanyControllerIT {
         Assertions.assertEquals("test1-updated", findResponse.getResponse().getName());
     }
 
+    @Test
+    public void giveParentToCompanyThatDidNotParentBefore() throws Exception {
+        CompanyDto childCompany = CompanyDto.builder().name("child").build();
+        ResponseDto<Long> childResponse = jsonToObject(callCreateCompanyApi(childCompany), new TypeReference<ResponseDto<Long>>() {
+        });
+
+        ResponseDto<Long> parentResponseDto = jsonToObject(callCreateCompanyApi(CompanyDto.builder().name("parent").build()), new TypeReference<ResponseDto<Long>>() {
+        });
+        CompanyDto parentCompany = new CompanyDto();
+        parentCompany.setId(parentResponseDto.getResponse());
+
+        childCompany.setId(childResponse.getResponse());
+        childCompany.setParent(parentCompany);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(childCompany)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())));
+
+        ResponseDto<CompanyDto> findResponse = jsonToObject(callFindByIdCompany(childResponse.getResponse()), new TypeReference<ResponseDto<CompanyDto>>() {
+        });
+        Assertions.assertEquals(childCompany.getParent().getId(), findResponse.getResponse().getParent().getId());
+        Assertions.assertEquals("0," + parentCompany.getId(), findResponse.getResponse().getPath());
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
