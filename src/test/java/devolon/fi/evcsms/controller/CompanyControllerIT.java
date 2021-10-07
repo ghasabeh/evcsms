@@ -47,7 +47,7 @@ public class CompanyControllerIT {
     private CompanyRepository companyRepository;
 
     @Test
-    public void createACompanyWithoutParent() throws Exception {
+    public void createACompanyWithoutParentAndFindItById() throws Exception {
         String jsonResponse = callCreateCompanyApi(CompanyDto.builder().name("test1").build());
         ResponseDto<Long> responseDto = jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
         });
@@ -59,7 +59,7 @@ public class CompanyControllerIT {
     }
 
     @Test
-    public void createACompanyWithParent() throws Exception {
+    public void createACompanyWithParentAndFindItById() throws Exception {
         ResponseDto<Long> parentResponseDto = jsonToObject(callCreateCompanyApi(CompanyDto.builder().name("parent").build()), new TypeReference<ResponseDto<Long>>() {
         });
         CompanyDto parentCompany = new CompanyDto();
