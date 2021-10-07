@@ -49,6 +49,18 @@ public class BaseExceptionHandler {
         errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
         return errorMessageResponseDto;
     }
+    @ExceptionHandler(CycleFoundInTreeException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseDto<ErrorMessage> handleCycleFoundInTreeExceptionException(CycleFoundInTreeException ex, WebRequest request) {
+        ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .timestamp(new Date())
+                .message(ex.getMessage())
+                .description(((ServletWebRequest) request).getRequest().getMethod() + " " + request.getDescription(false))
+                .build());
+        errorMessageResponseDto.setResponseType(ResponseType.EXCEPTION);
+        return errorMessageResponseDto;
+    }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

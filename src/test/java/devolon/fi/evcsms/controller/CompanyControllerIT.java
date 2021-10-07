@@ -224,6 +224,38 @@ public class CompanyControllerIT {
                 .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())));
     }
 
+    @Test
+    public void canNotMakeCycleInCompanyTree() throws Exception{
+        /* D --> C --> B --> A */
+        CompanyDto aCompany = CompanyDto.builder().name("A").build();
+        String jsonResponse = callCreateCompanyApi(aCompany);
+        aCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        CompanyDto bCompany = CompanyDto.builder().name("B").parent(aCompany).build();
+        jsonResponse = callCreateCompanyApi(bCompany);
+        bCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        CompanyDto cCompany = CompanyDto.builder().name("C").parent(bCompany).build();
+        jsonResponse = callCreateCompanyApi(cCompany);
+        cCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        CompanyDto dCompany = CompanyDto.builder().name("D").parent(cCompany).build();
+        jsonResponse = callCreateCompanyApi(dCompany);
+        dCompany.setId(jsonToObject(jsonResponse, new TypeReference<ResponseDto<Long>>() {
+        }).getResponse());
+        /* D --> C --> B --> A */
+
+        dCompany.setParent(null);
+        aCompany.setParent(dCompany);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(aCompany)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.FORBIDDEN.value())))
+                .andExpect(jsonPath("$.response.message", is("Illegal Action. Making Cycle in company hierarchy is forbidden!")));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();

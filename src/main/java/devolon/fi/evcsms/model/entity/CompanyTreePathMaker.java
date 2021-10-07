@@ -2,10 +2,12 @@ package devolon.fi.evcsms.model.entity;
 
 import devolon.fi.evcsms.repository.CompanyRepository;
 import devolon.fi.evcsms.utils.exception.CustomEntityNotFoundException;
+import devolon.fi.evcsms.utils.exception.CycleFoundInTreeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -39,6 +41,10 @@ public class CompanyTreePathMaker {
             if (Objects.nonNull(entity.getParent())) {
                 //we should call find by id for parent and set it manually
                 entity.setParent(repository.findById(entity.getParent().getId()).orElseThrow(CustomEntityNotFoundException::new));
+                boolean isCycle = Arrays.stream(entity.getParent().getPath().split(",")).anyMatch(entity.getId().toString()::equals);
+                if (isCycle) {
+                    throw new CycleFoundInTreeException();
+                }
             }
             //because newEntity is not managed then children not loaded
             //so we should load children from oldEntity in order to set their path
