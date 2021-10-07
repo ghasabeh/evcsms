@@ -4,15 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import devolon.fi.evcsms.model.dto.CompanyDto;
 import devolon.fi.evcsms.model.dto.response.ResponseDto;
 import devolon.fi.evcsms.repository.CompanyRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,7 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Alireza Ghasabeie, a.ghasabeh@gmail.com
  */
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CompanyControllerIT {
 
     private MockMvc mockMvc;
@@ -35,7 +33,7 @@ public class CompanyControllerIT {
     @Autowired
     private CompanyController companyController;
 
-    @Before
+    @BeforeAll
     public void setup() throws Exception {
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.companyController).build();// Standalone context
     }
