@@ -210,6 +210,20 @@ public class CompanyControllerIT {
                 .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
+    @Test
+    public void deleteACompany() throws Exception {
+        Long companyIdCreated = jsonToObject(callCreateCompanyApi(CompanyDto.builder().name("test1").build()),
+                new TypeReference<ResponseDto<Long>>() {
+                }).getResponse();
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/company/{id}", companyIdCreated))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.GENERAL.getValue())));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/company/{id}", companyIdCreated))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
