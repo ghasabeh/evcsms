@@ -16,5 +16,6 @@ import javax.validation.constraints.NotBlank;
 public class CompanyDto extends BaseDto {
     @NotBlank(message = "name can not be blank", groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String name;
+    private String path;
     private CompanyDto parent;
 }
