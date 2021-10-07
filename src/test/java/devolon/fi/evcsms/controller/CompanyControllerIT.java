@@ -89,6 +89,18 @@ public class CompanyControllerIT {
                 .andReturn().getResponse().getContentAsString();
     }
 
+    @Test
+    public void canNotCreateACompanyWithParentDoesNotExist() throws Exception {
+        CompanyDto parentWithFakeId = new CompanyDto();
+        parentWithFakeId.setId(1000L);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonify(CompanyDto.builder().name("test1").parent(parentWithFakeId).build())))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();

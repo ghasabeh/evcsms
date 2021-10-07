@@ -25,7 +25,7 @@ public class BaseExceptionHandler {
     private final SqlExceptionTranslator translator;
 
     @ExceptionHandler(value = {EntityNotFoundException.class, CustomEntityNotFoundException.class, EmptyResultDataAccessException.class})
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseDto<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
         ResponseDto<ErrorMessage> errorMessageResponseDto = new ResponseDto<>(ErrorMessage.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
