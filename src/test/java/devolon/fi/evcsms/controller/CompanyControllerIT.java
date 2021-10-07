@@ -202,6 +202,14 @@ public class CompanyControllerIT {
         Assertions.assertEquals(pathExpectedD, dCompanyCallByFindApi.getPath());
     }
 
+    @Test
+    public void deleteCompanyNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/company/{id}", 1000L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.responseType", is(ResponseType.EXCEPTION.getValue())))
+                .andExpect(jsonPath("$.response.statusCode", is(HttpStatus.NOT_FOUND.value())));
+    }
+
     @AfterEach
     public void tearDown() {
         companyRepository.deleteAll();
