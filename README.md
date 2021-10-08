@@ -123,8 +123,9 @@ There are many enhancements still applicable on EVCSMS, most important ones incl
 Developed with Spring boot framework. This app made as requested by Devolon.
 
 <br/>
-<img src="https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg" width="100" alt="spring logo"/>
-<br/>
-<img src="https://logodix.com/logo/1614477.png" width="100" alt="spring boot logo">
-<br/>
-<img src="https://media-exp1.licdn.com/dms/image/C560BAQE0KP4uvwVOGg/company-logo_200_200/0/1519874975273?e=2159024400&v=beta&t=CkfwEoN1f15LYPPpzpLnceXBQ-lOz4MxfTTlHeODoJg" width="100" alt="devolon logo" />
+
+![Spring Logo](https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg =100x100))
+
+![Spring boot Logo](https://logodix.com/logo/1614477.png" =100x100)
+
+![Devolon Logo](https://media-exp1.licdn.com/dms/image/C560BAQE0KP4uvwVOGg/company-logo_200_200/0/1519874975273?e=2159024400&v=beta&t=CkfwEoN1f15LYPPpzpLnceXBQ-lOz4MxfTTlHeODoJg =100x100)
