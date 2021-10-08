@@ -58,41 +58,45 @@ see swagger you must run the application.
 
 0. make sure you have `git`, `jdk-17`, `maven`, `docker` and `docker-compose`installed.
 1. clone the project to your preferred directory.
-   ```shell
-    git clone https://a_ghasabeh@bitbucket.org/a_ghasabeh/evcsms.git
-   ```
-2. To setup database use commands below
-    ```shell
-    cd evcsms
-   
-    .src/main/resources/setup/InstallDatabase.sh
-    ```
-   or just run:
 
-   ```shell
-   docker-compose -f src\main\resources\setup\postgres.yml up -d
-   ```
+```shell
+git clone https://a_ghasabeh@bitbucket.org/a_ghasabeh/evcsms.git
+```
+
+2. To setup database use commands below
+
+```shell
+cd evcsms
+.src/main/resources/setup/InstallDatabase.sh
+```
+
+or just run:
+
+```shell
+docker-compose -f src\main\resources\setup\postgres.yml up -d
+```
 
 3. To build project:
-   ```shell
-   mvn -DskipTests=true clean install
-   ```
+```shell
+mvn -DskipTests=true clean install
+```
 4. To run the app with docker
-   ```shell
-   docker build -t evcsms .
-   docker run -p 8090:8090 --network=postgres_network -itd --name=evcsms evcsms
-   ```
 
-<img src="https://www.freeiconspng.com/thumbs/warning-icon-png/warning-icon-5.png" width="20" /> In <b>windows</b>, it has some problems with docker networks. you should obtain postgres host ip via command below and modify application.yml to use from it.
+```shell
+docker build -t evcsms .
+docker run -p 8090:8090 --network=postgres_network -itd --name=evcsms evcsms
+```
 
-```shell 
+<img src="https://www.freeiconspng.com/thumbs/warning-icon-png/warning-icon-5.png" width="20" alt="warning" /> In <b>windows</b>, it has some problems with docker networks. you should obtain postgres host ip via command below and modify application.yml to use from it.
+
+```shell
 docker inspect -f "{{.NetworkSettings.Networks.postgres_network.IPAddress }}"  postgres
-   ```
+```
 
 or simply just run with:
 
-   ```shell
-   java -jar target/evcsms.jar
+```shell
+java -jar target/evcsms.jar
 ```
 
 # Tests
@@ -118,9 +122,9 @@ There are many enhancements still applicable on EVCSMS, most important ones incl
 
 Developed with Spring boot framework. This app made as requested by Devolon.
 
-<br>
-<img src="https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg" width="100" alt="spring logo">
-<br>
+<br/>
+<img src="https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg" width="100" alt="spring logo"/>
+<br/>
 <img src="https://logodix.com/logo/1614477.png" width="100" alt="spring boot logo">
-<br>
-<img src="https://media-exp1.licdn.com/dms/image/C560BAQE0KP4uvwVOGg/company-logo_200_200/0/1519874975273?e=2159024400&v=beta&t=CkfwEoN1f15LYPPpzpLnceXBQ-lOz4MxfTTlHeODoJg" width="100" alt="devolon logo">
+<br/>
+<img src="https://media-exp1.licdn.com/dms/image/C560BAQE0KP4uvwVOGg/company-logo_200_200/0/1519874975273?e=2159024400&v=beta&t=CkfwEoN1f15LYPPpzpLnceXBQ-lOz4MxfTTlHeODoJg" width="100" alt="devolon logo" />
