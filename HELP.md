@@ -85,8 +85,10 @@ or simply just run with:
    java -jar target/evcsms.jar
 ```
 #Tests
-To make sure everything is working, you may run EVCSMS's tests. Don't forget to create and config a test database before running tests!
-
+To make sure everything is working, you may run EVCSMS's tests (unit tests and integration tests). Don't forget to create and config a test database before running tests!
+```shell
+mvn verify
+```
 
 ## TODOs
 There are many enhancements still applicable on EVCSMS, most important ones include:
