@@ -39,7 +39,7 @@ public class CompanyControllerIT {
     private BaseExceptionHandler baseExceptionHandler;
 
     @BeforeAll
-    public void setup() throws Exception {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.companyController, this.baseExceptionHandler).build();// Standalone context
     }
 
