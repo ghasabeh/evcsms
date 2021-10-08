@@ -50,14 +50,43 @@ You're just simple steps away from deploying the project and starting to work on
 0. make sure you have `git`, `jdk-17`, `maven`, `docker` and `docker-compose`installed.
 1. clone the project to your preferred directory.
    ```shell
-   git clone https://a_ghasabeh@bitbucket.org/a_ghasabeh/evcsms.git
+    git clone https://a_ghasabeh@bitbucket.org/a_ghasabeh/evcsms.git
    ```
-2. To setup database use:
+2. To setup database use commands below
     ```shell
     cd evcsms
    
     .src/main/resources/setup/InstallDatabase.sh
     ```
+   or just run:
+   
+   ```shell
+   docker-compose -f src\main\resources\setup\postgres.yml up -d
+   ```
+
+3. To build project:
+   ```shell
+   mvn -DskipTests=true clean install
+   ```
+4. To run the app with docker 
+   ```shell
+   docker build -t evcsms .
+   docker run -p 8090:8090 --network=postgres_network -itd --name=evcsms evcsms
+   ```
+
+<img src="https://www.freeiconspng.com/thumbs/warning-icon-png/warning-icon-5.png" width="20" /> In <b>windows</b>, it has some problems with docker networks. you should obtain postgres host ip via command below and modify application.yml to use from it.
+   
+```shell 
+docker inspect -f "{{.NetworkSettings.Networks.postgres_network.IPAddress }}"  postgres
+   ```
+   
+or simply just run with:
+   ```shell
+   java -jar target/evcsms.jar
+```
+#Tests
+To make sure everything is working, you may run EVCSMS's tests. Don't forget to create and config a test database before running tests!
+
 
 ## TODOs
 There are many enhancements still applicable on EVCSMS, most important ones include:
