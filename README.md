@@ -77,9 +77,11 @@ docker-compose -f src\main\resources\setup\postgres.yml up -d
 ```
 
 3. To build project:
+
 ```shell
 mvn -DskipTests=true clean install
 ```
+
 4. To run the app with docker
 
 ```shell
@@ -87,7 +89,8 @@ docker build -t evcsms .
 docker run -p 8090:8090 --network=postgres_network -itd --name=evcsms evcsms
 ```
 
-<img src="https://www.freeiconspng.com/thumbs/warning-icon-png/warning-icon-5.png" width="20" alt="warning" /> In <b>windows</b>, it has some problems with docker networks. you should obtain postgres host ip via command below and modify application.yml to use from it.
+In **_windows_**, it has some problems with docker networks. you should obtain postgres host ip via command below and
+modify application.yml to use from it.
 
 ```shell
 docker inspect -f "{{.NetworkSettings.Networks.postgres_network.IPAddress }}"  postgres
@@ -124,8 +127,8 @@ Developed with Spring boot framework. This app made as requested by Devolon.
 
 <br/>
 
-![Spring Logo](https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg){width=100px}
+![Spring Logo](https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg)
 
-![Spring boot Logo](https://logodix.com/logo/1614477.png)
+![Spring boot Logo](https://grape.solutions/static/fdaa06e0ed083acefd8fdf3ffaa0eba5/20ef8/logo_springboot.png)
 
 ![Devolon Logo](https://media-exp1.licdn.com/dms/image/C560BAQE0KP4uvwVOGg/company-logo_200_200/0/1519874975273?e=2159024400&v=beta&t=CkfwEoN1f15LYPPpzpLnceXBQ-lOz4MxfTTlHeODoJg)
