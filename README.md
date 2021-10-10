@@ -56,24 +56,13 @@ see swagger you must run the application.
 
 ## Installation
 
-0. make sure you have `git`, `jdk-17`, `maven`, `docker` and `docker-compose`installed.
-1. clone the project to your preferred directory.
+1. make sure you have `git`, `jdk-17`, `maven`, `docker` and `docker-compose`installed.
+   
+
+2. clone the project to your preferred directory.
 
 ```shell
 git clone https://a_ghasabeh@bitbucket.org/a_ghasabeh/evcsms.git
-```
-
-2. To setup database use commands below
-
-```shell
-cd evcsms
-.src/main/resources/setup/InstallDatabase.sh
-```
-
-or just run:
-
-```shell
-docker-compose -f src\main\resources\setup\postgres.yml up -d
 ```
 
 3. To build project:
@@ -82,21 +71,17 @@ docker-compose -f src\main\resources\setup\postgres.yml up -d
 mvn -DskipTests=true clean install
 ```
 
-4. To run the app with docker
+
+4. To setup database and run application just simply do this:
 
 ```shell
-docker build -t evcsms .
-docker run -p 8090:8090 --network=postgres_network -itd --name=evcsms evcsms
+cd evcsms
+docker-compose up -d
 ```
 
-In **_windows_**, it has some problems with docker networks. you should obtain postgres host ip via command below and
-modify application.yml to use from it.
+to check application would launch correctly, see the [swagger page](http://localhost:8090/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/)
 
-```shell
-docker inspect -f "{{.NetworkSettings.Networks.postgres_network.IPAddress }}"  postgres
-```
-
-or simply just run with:
+4. you can run app without docker and docker-compose. Just setup postgres database and create database, and a user in it then modify application.yml and set spring datasource config properties, After that simply run:
 
 ```shell
 java -jar target/evcsms.jar
@@ -116,8 +101,7 @@ mvn verify
 There are many enhancements still applicable on EVCSMS, most important ones include:
 
 - Write more unit tests and integration tests.
-- I am new to docker. enhance docker file and docker-compose to run application alongside it's dependency just with one
-  file
+- I am new to docker. enhance docker file and docker-compose to use environment variable and sets database config parametrically. 
 - Write a simple, not fancy interface that will consume your API programmatically.
 - Make more documentations.
 

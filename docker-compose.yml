@@ -1,0 +1,37 @@
+version: '3.1'
+networks:
+  evcsms_net:
+    name: evcsms_net
+    driver: bridge
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: evcsms
+    ports:
+      - 8090:8090
+    networks:
+      - evcsms_net
+    depends_on:
+      PostgreSql:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSql:5432/evcsms
+  PostgreSql:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: evcsms
+      POSTGRES_USER: evcsms
+      POSTGRES_PASSWORD: evcsms@123
+    networks:
+      - evcsms_net
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U evcsms" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
