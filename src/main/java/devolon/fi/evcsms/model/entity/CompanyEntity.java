@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "Company", uniqueConstraints = {
+@Table(name = "COMPANY", uniqueConstraints = {
         @UniqueConstraint(columnNames = "NAME", name = "company_uk_name")
 })
 @SequenceGenerator(name = "DEFAULT_SEQ_GEN", sequenceName = "COMPANY_SEQ", allocationSize = 1)
