@@ -89,8 +89,8 @@ java -jar target/evcsms.jar
 
 # Tests
 
-To make sure everything is working, you may run EVCSMS's tests (unit tests and integration tests). Don't forget to
-create and config a test database before running tests!
+To make sure everything is working, you may run EVCSMS's tests (unit tests and integration tests). ~~Don't forget to
+create and config a test database before running tests!~~ For test evcsms uses H2 database and need not configure database.
 
 ```shell
 mvn verify
