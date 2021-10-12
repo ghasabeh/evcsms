@@ -6,12 +6,12 @@ server:
 # ***** data source config *****
 ---
 spring:
+  datasource:
+    url: jdbc:h2:mem:TESTDB;DB_CLOSE_DELAY=-1;
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-  datasource:
-    url: "jdbc:postgresql://localhost:5432/evcsms_test"
-    username: test_app
-    password: test
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
